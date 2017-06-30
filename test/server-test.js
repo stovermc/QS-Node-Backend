@@ -44,14 +44,16 @@ describe('server', function() {
     describe('GET /api/v1/foods', function() {
       beforeEach(function(done) {
         Food.createFood('carrot', 30)
-        Food.createFood('apple', 25)
-          .then(function() { done() })
+          .then(function() {
+            Food.createFood('apple', 25)
+              .then(function() { done() })
+          })
       })
 
-      afterEach(function(done) {
+    afterEach(function(done) {
         Food.emptyFoodsTable()
-          .then(function() { done() });
-      })
+          .then(function() { done() })
+    })
 
       this.timeout(100000000)
       it('should a list of all foods with their id, name and calories', function(done) {
@@ -69,6 +71,7 @@ describe('server', function() {
                 assert.equal(parsedFood['foods'][0].id, id)
                 assert.equal(parsedFood['foods'][0].name, name)
                 assert.equal(parsedFood['foods'][0].calories, calories)
+                assert.equal(parsedFood['foods'].length, 2)
                 assert.ok(parsedFood['foods'][0].created_at)
                 done()
               })
