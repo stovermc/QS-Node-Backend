@@ -3,8 +3,6 @@ const app = require("../server")
 const request = require("request")
 const Food = require("../lib/models/food")
 
-var pry = require('pryjs')
-
 describe('server', function() {
   before(function(done) {
     this.port = 9876
@@ -56,18 +54,17 @@ describe('server', function() {
 
       this.timeout(100000000)
       it('should a list of all foods with their id, name and calories', function(done) {
-        var ourRequest = this.request
+        const ourRequest = this.request
         ourRequest.get('/api/v1/foods', function(error, response) {
           if (error) { done(error) }
           Food.findAll()
             .then(function(data){
-              var id = data.rows[0].id
-              var name =  data.rows[0].name
-              var calories =  data.rows[0].calories
+              const id = data.rows[0].id
+              const name =  data.rows[0].name
+              const calories =  data.rows[0].calories
               ourRequest.get('/api/v1/foods', function(error, response){
                 if (error) { done(error) }
-                var parsedFood = JSON.parse(response.body)
-                // eval(pry.it)
+                const parsedFood = JSON.parse(response.body)
                 assert.equal(parsedFood['foods'][0].id, id)
                 assert.equal(parsedFood['foods'][0].name, name)
                 assert.equal(parsedFood['foods'][0].calories, calories)
