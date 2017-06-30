@@ -1,10 +1,12 @@
 const assert = require("chai").assert
 const app = require("../server")
 const request = require("request")
+const Food = require("../lib/models/food")
+
 var pry = require('pryjs')
 
-describe('server', () => {
-  before( (done) => {
+describe('server', function() {
+  before(function(done) {
     this.port = 9876
     this.server = app.listen(this.port, function (error, result) {
       if (error) { done(error) }
@@ -15,7 +17,7 @@ describe('server', () => {
     })
   })
 
-  after( () => {
+  after( function() {
     this.server.close()
   })
 
@@ -23,8 +25,8 @@ describe('server', () => {
     assert(app)
   })
 
-  describe('GET /', () => {
-    it('should return a 200', (done) => {
+  describe('GET /', function() {
+    it('should return a 200', function(done) {
       this.request.get('/', function(error, response) {
         if (error) { done(error) }
         assert.equal(response.statusCode, 200)
@@ -32,7 +34,7 @@ describe('server', () => {
       })
     })
 
-    it('should have a body with the name of the application', (done) => {
+    it('should have a body with the name of the application', function(done) {
       this.request.get('/', function(error, response){
         if (error) { done(error) }
         assert.include(response.body, app.locals.title)
@@ -40,9 +42,20 @@ describe('server', () => {
       })
     })
 
-    describe('GET /api/v1/foods', () => {
-      this.timeout(1000000000)
-      it('should a list of all foods with their id, name and calories', (done) => {
+    describe('GET /api/v1/foods', function() {
+      beforeEach(function(done) {
+        Food.createFood('carrot', 30)
+        Food.createFood('apple', 25)
+          .then(function() { done() })
+      })
+
+      afterEach(function(done) {
+        Food.emptyFoodsTable()
+          .then(function() { done() });
+      })
+
+      this.timeout(100000000)
+      it('should a list of all foods with their id, name and calories', function(done) {
         var ourRequest = this.request
         ourRequest.get('/api/v1/foods', function(error, response) {
           if (error) { done(error) }
@@ -51,14 +64,14 @@ describe('server', () => {
               var id = data.rows[0].id
               var name =  data.rows[0].name
               var calories =  data.rows[0].calories
-              eval(pry.it)
               ourRequest.get('/api/v1/foods', function(error, response){
                 if (error) { done(error) }
                 var parsedFood = JSON.parse(response.body)
-                assert.equal(parsedFood[0].id, id)
-                assert.equal(parsedFood[0].name, name)
-                assert.equal(parsedFood[0].calories, calories)
-                assert.ok(parsedFood[0].createdAt)
+                // eval(pry.it)
+                assert.equal(parsedFood['foods'][0].id, id)
+                assert.equal(parsedFood['foods'][0].name, name)
+                assert.equal(parsedFood['foods'][0].calories, calories)
+                assert.ok(parsedFood['foods'][0].created_at)
                 done()
               })
             })
