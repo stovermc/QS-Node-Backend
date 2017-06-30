@@ -2,8 +2,7 @@ const assert = require("chai").assert
 const app = require("../server")
 const request = require("request")
 const Food = require("../lib/models/food")
-
-var pry = require('pryjs')
+const pry = require('pryjs')
 
 describe('server', function() {
   before(function(done) {
@@ -67,7 +66,6 @@ describe('server', function() {
               ourRequest.get('/api/v1/foods', function(error, response){
                 if (error) { done(error) }
                 var parsedFood = JSON.parse(response.body)
-                // eval(pry.it)
                 assert.equal(parsedFood['foods'][0].id, id)
                 assert.equal(parsedFood['foods'][0].name, name)
                 assert.equal(parsedFood['foods'][0].calories, calories)
