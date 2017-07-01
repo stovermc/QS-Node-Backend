@@ -24,7 +24,7 @@ describe('server', function() {
     assert(app)
   })
 
-  describe('GET /', function() {
+  describe('GET', function() {
     it('should return a 200', function(done) {
       this.request.get('/', function(error, response) {
         if (error) { done(error) }
@@ -50,12 +50,11 @@ describe('server', function() {
           })
       })
 
-    afterEach(function(done) {
-        Food.emptyFoodsTable()
-          .then(function() { done() })
-    })
+      afterEach(function(done) {
+          Food.emptyFoodsTable()
+            .then(function() { done() })
+      })
 
-      this.timeout(100000000)
       it('should a list of all foods with their id, name and calories', function(done) {
         const ourRequest = this.request
         ourRequest.get('/api/v1/foods', function(error, response) {
@@ -75,6 +74,46 @@ describe('server', function() {
                 assert.ok(parsedFood['foods'][0].created_at)
                 done()
               })
+            })
+        })
+      })
+    })
+  })
+  
+  describe('POST', function() {
+
+    describe('POST /api/v1/foods', function() {
+
+      afterEach(function(done) {
+          Food.emptyFoodsTable()
+            .then(function() { done() })
+      })
+
+      it('should post a food to foods', function(done) {
+        const ourRequest = this.request
+        const cottonCandy = {name: 'big fluffy cotton candy', calories: 300}
+        Food.findAll()
+          .then(function(data){
+            const foods = data.rows
+            assert.equal(foods.length, 0)
+          })
+        
+  this.timeout(100000000)
+        ourRequest.post('/api/v1/foods', { form: cottonCandy }, function(error, response) {
+          if (error) { done(error) }
+          Food.findAll()
+            .then(function(data){
+              const foods = data.rows
+              const id = data.rows[0].id
+              const name =  data.rows[0].name
+              const calories =  data.rows[0].calories
+              
+              assert.equal(foods.length, 1)
+              assert.equal(foods[0].id, id)
+              assert.equal(foods[0].name, name)
+              assert.equal(foods[0].calories, calories)
+              assert.ok(foods[0].created_at)
+              done()
             })
         })
       })

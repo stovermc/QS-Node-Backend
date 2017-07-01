@@ -37,5 +37,9 @@ app.get('/api/v1/foods', function(request, response){
   })
 })
 
+app.post('/api/v1/foods', function (request, response) {
+  
+})
+
 
 module.exports = app
