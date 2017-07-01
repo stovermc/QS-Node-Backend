@@ -58,26 +58,22 @@ describe('server', function() {
       this.timeout(100000000)
       it('should a list of all foods with their id, name and calories', function(done) {
         const ourRequest = this.request
-        ourRequest.get('/api/v1/foods', function(error, response) {
-          if (error) { done(error) }
-          Food.findAll()
-            .then(function(data){
-              const id = data.rows[0].id
-              const name =  data.rows[0].name
-              const calories =  data.rows[0].calories
-
-              ourRequest.get('/api/v1/foods', function(error, response){
-                if (error) { done(error) }
-                const parsedFood = JSON.parse(response.body)
-                assert.equal(parsedFood['foods'][0].id, id)
-                assert.equal(parsedFood['foods'][0].name, name)
-                assert.equal(parsedFood['foods'][0].calories, calories)
-                assert.equal(parsedFood['foods'].length, 2)
-                assert.ok(parsedFood['foods'][0].created_at)
-                done()
-              })
+        Food.findAll()
+          .then(function(data){
+            const id = data.rows[0].id
+            const name =  data.rows[0].name
+            const calories =  data.rows[0].calories
+            ourRequest.get('/api/v1/foods', function(error, response){
+              if (error) { done(error) }
+              const parsedFood = JSON.parse(response.body)
+              assert.equal(parsedFood['foods'][0].id, id)
+              assert.equal(parsedFood['foods'][0].name, name)
+              assert.equal(parsedFood['foods'][0].calories, calories)
+              assert.equal(parsedFood['foods'].length, 2)
+              assert.ok(parsedFood['foods'][0].created_at)
+              done()
             })
-        })
+          })
       })
     })
 
