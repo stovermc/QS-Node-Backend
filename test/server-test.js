@@ -87,7 +87,6 @@ describe('server', function() {
           .then(function() { done() })
       })
 
-      this.timeout(100000000)
       it('should return a single food', function(done){
         const ourRequest = this.request
         Food.findFood(1)
@@ -111,14 +110,15 @@ describe('server', function() {
   })
   
   describe('POST', function() {
-
+    
     describe('POST /api/v1/foods', function() {
-
+      this.timeout(100000000)
+  
       afterEach(function(done) {
           Food.emptyFoodsTable()
             .then(function() { done() })
       })
-
+  
       it('should post a food to foods', function(done) {
         const ourRequest = this.request
         const cottonCandy = {name: 'big fluffy cotton candy', calories: 300}
@@ -128,21 +128,68 @@ describe('server', function() {
             assert.equal(foods.length, 0)
           })
         
-  this.timeout(100000000)
         ourRequest.post('/api/v1/foods', { form: cottonCandy }, function(error, response) {
           if (error) { done(error) }
+          
+          const foods = JSON.parse(response.body)
+          assert.equal(foods.length, 1)
+          assert.equal(foods[0].id, 1)
+          assert.equal(foods[0].name, cottonCandy.name)
+          assert.equal(foods[0].calories, cottonCandy.calories)
+          assert.ok(foods[0].created_at)
+          done()
+        })
+      })
+      
+      it('should return a 422 if no food is given', function(done){
+        const ourRequest = this.request
+        const noFood = {}
+        
+        ourRequest.post('/api/v1/foods', { form: noFood }, function(error, response) {
+          if (error) { done(error) }
+          
+          assert.equal(response.statusCode, 422)
+          
           Food.findAll()
             .then(function(data){
               const foods = data.rows
-              const id = data.rows[0].id
-              const name =  data.rows[0].name
-              const calories =  data.rows[0].calories
-              
-              assert.equal(foods.length, 1)
-              assert.equal(foods[0].id, id)
-              assert.equal(foods[0].name, name)
-              assert.equal(foods[0].calories, calories)
-              assert.ok(foods[0].created_at)
+              assert.equal(foods.length, 0)
+              done()
+            })
+        })
+      })
+      
+      it('should return a 422 if no name is given', function(done) {
+        const ourRequest = this.request
+        const noName = {name: "", calories: 50}
+        
+        ourRequest.post('/api/v1/foods', { form: noName }, function(error, response) {
+          if (error) { done(error) }
+          
+          assert.equal(response.statusCode, 422)
+          
+          Food.findAll()
+            .then(function(data){
+              const foods = data.rows
+              assert.equal(foods.length, 0)
+              done()
+            })
+        })
+      })
+      
+      it('should return a 422 if no calories are given', function(done) {
+        const ourRequest = this.request
+        const noCalories = {name:"suga cube", calories: ""}
+        
+        ourRequest.post('/api/v1/foods', { form: noCalories }, function(error, response) {
+          if (error) { done(error) }
+          
+          assert.equal(response.statusCode, 422)
+          
+          Food.findAll()
+            .then(function(data){
+              const foods = data.rows
+              assert.equal(foods.length, 0)
               done()
             })
         })
