@@ -40,6 +40,18 @@ app.get('/api/v1/foods', function(request, response){
 app.post('/api/v1/foods', function (request, response) {
   
 })
+  
+app.get('/api/v1/foods/:id', function(request, response){
+  const id = request.params.id
+  Food.findFood(id)
+    .then(function(data) {
+      const foodData = data
+
+      if (data.rowCount == 0) { return response.sendStatus(404) }
+      const rawFood = data.rows
+      response.json({ rawFood })
+    })
+})
 
 
 module.exports = app
