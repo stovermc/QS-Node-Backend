@@ -115,7 +115,7 @@ describe('server', function() {
 
             ourRequest.get(`/api/v1/foods/${id}`, function(error, response){
               if (error) { done(error) }
-              let parsedFood = JSON.parse(response.body)
+              const parsedFood = JSON.parse(response.body)
               assert.equal(parsedFood[0].id, id)
               assert.equal(parsedFood[0].name, name)
               assert.equal(parsedFood[0].calories, calories)
@@ -156,7 +156,7 @@ describe('server', function() {
 
         ourRequest.put(`/api/v1/foods/${id}`, {form: food_params}, function(error, response){
           if (error) { done(error) }
-          let parsedFood = JSON.parse(response.body)
+          const parsedFood = JSON.parse(response.body)
           assert.equal(parsedFood[0].id, id)
           assert.equal(parsedFood[0].name, food_params.name)
           assert.equal(parsedFood[0].calories, food_params.calories)

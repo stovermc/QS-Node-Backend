@@ -53,7 +53,7 @@ app.put('/api/v1/foods/:id', function(request, response){
   const params = request.body
   Food.updateFood(params, id)
     .then(function(data){
-      let food = data
+      const food = data
       if(!food) { response.sendStatus(404) }
       response.json(data)
     })
