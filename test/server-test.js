@@ -65,6 +65,7 @@ describe('server', function() {
               const id = data.rows[0].id
               const name =  data.rows[0].name
               const calories =  data.rows[0].calories
+
               ourRequest.get('/api/v1/foods', function(error, response){
                 if (error) { done(error) }
                 const parsedFood = JSON.parse(response.body)
@@ -77,6 +78,39 @@ describe('server', function() {
               })
             })
         })
+      })
+    })
+
+    describe('GET /api/v1/foods/:id', function(){
+      beforeEach(function(done){
+        Food.createFood('muffin', 150)
+          .then(function() { done() })
+      })
+
+      afterEach(function(done){
+        Food.emptyFoodsTable()
+          .then(function() { done() })
+      })
+
+      this.timeout(100000000)
+      it('should return a single food', function(done){
+        const ourRequest = this.request
+        Food.findFood(1)
+          .then(function(data){
+            let id = data.rows[0].id
+            let name = data.rows[0].name
+            let calories = data.rows[0].calories
+
+            ourRequest.get(`/api/v1/foods/${id}`, function(error, response){
+              if (error) { done(error) }
+              let parsedFood = JSON.parse(response.body)
+
+              assert.equal(parsedFood['rawFood'][0].id, id)
+              assert.equal(parsedFood['rawFood'][0].name, name)
+              assert.equal(parsedFood['rawFood'][0].calories, calories)
+              done()
+            })
+          })
       })
     })
   })
