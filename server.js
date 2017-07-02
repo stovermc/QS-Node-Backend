@@ -25,15 +25,21 @@ app.get('/', function(request, response) {
 app.get('/api/v1/foods', function(request, response){
   const id = request.params.id
   Food.findAll()
-  .then( function(data) {
-    const foodData = data
-
-    if (data.rowCount == 0) { return response.sendStatus(404) }
-    const rawFoods = data.rows
-    const foods = rawFoods.map(function (food){
-      return { id: food.id, name: food.name, calories: food.calories, created_at: food.created_at }
+    .then( function(data) {
+      if (data.rowCount == 0) { return response.sendStatus(404) }
+      response.json(data.rows)
     })
-    response.json({foods})
+})
+
+app.get('/api/v1/foods/:id', function(request, response){
+  const id = request.params.id
+  Food.findFood(id)
+  .then(function(data) {
+    const foodData = data
+    
+    if (data.rowCount == 0) { return response.sendStatus(404) }
+    const rawFood = data.rows
+    response.json(rawFood)
   })
 })
 
@@ -51,26 +57,9 @@ app.post('/api/v1/foods', function (request, response) {
   Food.createFood(food.name, food.calories).then(function() {
     Food.findAll().then(function(data){
       if (data.rowCount == 0) { return response.sendStatus(404) }
-      const rawFoods = data.rows
-      const foods = rawFoods.map(function (food){
-        return { id: food.id, name: food.name, calories: food.calories, created_at: food.created_at }
-      })
-      response.json(foods)
+      response.json(data.rows)
     })
   })
 })
-  
-app.get('/api/v1/foods/:id', function(request, response){
-  const id = request.params.id
-  Food.findFood(id)
-    .then(function(data) {
-      const foodData = data
-
-      if (data.rowCount == 0) { return response.sendStatus(404) }
-      const rawFood = data.rows
-      response.json({ rawFood })
-    })
-})
-
 
 module.exports = app
