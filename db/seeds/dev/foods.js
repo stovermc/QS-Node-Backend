@@ -1,34 +1,43 @@
-
-exports.seed = function(knex, Promise) {
-  // Deletes ALL existing entries
-  return knex('table_name').del()
-    .then(function () {
-      // Inserts seed entries
-      return knex('table_name').insert([
-        {id: 1, colName: 'rowValue1'},
-        {id: 2, colName: 'rowValue2'},
-        {id: 3, colName: 'rowValue3'}
-      ]);
-    });
-};
-
-
 exports.seed = function(knex, Promise) {
   return knex.raw('TRUNCATE foods RESTART IDENTITY')
   .then(function() {
     return Promise.all([
       knex.raw(
         'INSERT INTO foods (name, calories, created_at) VALUES (?, ?, ?)',
-        ["", new Date]
+        ['Banana', 34, new Date]
       ),
       knex.raw(
         'INSERT INTO foods (name, calories, created_at) VALUES (?, ?, ?)',
-        ["I love rap music", new Date]
+        ['French Silk Pie', 340, new Date]
       ),
       knex.raw(
         'INSERT INTO foods (name, calories, created_at) VALUES (?, ?, ?)',
-        ["I hate game shows", new Date]
-      )
+        ['Orange', 34, new Date]
+      ),
+      knex.raw(
+        'INSERT INTO foods (name, calories, created_at) VALUES (?, ?, ?)',
+        ['Deep Dish Pizza', 890, new Date]
+      ),
+      knex.raw(
+        'INSERT INTO foods (name, calories, created_at) VALUES (?, ?, ?)',
+        ['Spinach Salad w/ dressing', 240, new Date]
+      ),
+      knex.raw(
+        'INSERT INTO foods (name, calories, created_at) VALUES (?, ?, ?)',
+        ['Roasted Cauliflower', 240, new Date]
+      ),
+      knex.raw(
+        'INSERT INTO foods (name, calories, created_at) VALUES (?, ?, ?)',
+        ['Chicken Breast', 210, new Date]
+      ),
+      knex.raw(
+        'INSERT INTO foods (name, calories, created_at) VALUES (?, ?, ?)',
+        ['Dark Chocolate', 150, new Date]
+      ),
+      knex.raw(
+        'INSERT INTO foods (name, calories, created_at) VALUES (?, ?, ?)',
+        ['Beef Jerky', 95, new Date]
+      ),
     ]);
   });
 };
