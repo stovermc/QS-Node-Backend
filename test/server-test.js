@@ -87,24 +87,42 @@ describe('server', function() {
           .then(function() { done() })
       })
 
+
+      it('should return a 200', function(done){
+        const ourRequest = this.request
+        Food.findFood(1)
+          .then(function(data){
+            const id = data.rows[0].id
+            const name =  data.rows[0].name
+            const calories =  data.rows[0].calories
+
+            ourRequest.get(`/api/v1/foods/${id}`, function(error, response){
+              if (error) { done(error) }
+              assert.equal(response.statusCode, 200)
+              done()
+            })
+          })
+      })
+
+      this.timeout(100000000)
+
       it('should return a single food', function(done){
         const ourRequest = this.request
         Food.findFood(1)
           .then(function(data){
-            let id = data.rows[0].id
-            let name = data.rows[0].name
-            let calories = data.rows[0].calories
+            const id = data.rows[0].id
+            const name =  data.rows[0].name
+            const calories =  data.rows[0].calories
 
             ourRequest.get(`/api/v1/foods/${id}`, function(error, response){
               if (error) { done(error) }
-              let parsedFood = JSON.parse(response.body)
-
-              assert.equal(parsedFood['rawFood'][0].id, id)
-              assert.equal(parsedFood['rawFood'][0].name, name)
-              assert.equal(parsedFood['rawFood'][0].calories, calories)
+              const parsedFood = JSON.parse(response.body)
+              assert.equal(parsedFood[0].id, id)
+              assert.equal(parsedFood[0].name, name)
+              assert.equal(parsedFood[0].calories, calories)
               done()
             })
-          })
+        })
       })
     })
   })
@@ -197,4 +215,44 @@ describe('server', function() {
     })
   })
 
+    describe('PUT /api/v1/foods/:id', function(){
+      beforeEach(function(done){
+        Food.createFood('muffin', 150)
+          .then(function() { done() })
+      })
+
+      afterEach(function(done){
+        Food.emptyFoodsTable()
+          .then(function() { done() })
+      })
+
+      this.timeout(100000000)
+      it('should return a 200', function(done) {
+        const ourRequest = this.request
+        const id = 1
+        const food_params = {name: 'steak', calories: 400}
+
+        ourRequest.put(`/api/v1/foods/${id}`, {form: food_params}, function(error, response){
+          if (error) { done(error) }
+          assert.equal(response.statusCode, 200)
+          done()
+        })
+      })
+
+      it('should update a food', function(done){
+        const ourRequest = this.request
+        const id = 1
+        const food_params = {name: 'steak', calories: 400}
+
+        ourRequest.put(`/api/v1/foods/${id}`, {form: food_params}, function(error, response){
+          if (error) { done(error) }
+          const parsedFood = JSON.parse(response.body)
+          assert.equal(parsedFood[0].id, id)
+          assert.equal(parsedFood[0].name, food_params.name)
+          assert.equal(parsedFood[0].calories, food_params.calories)
+          done()
+        })
+      })
+    })
+  })
 })
