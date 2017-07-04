@@ -65,12 +65,16 @@ app.post('/api/v1/foods', function (request, response) {
 app.put('/api/v1/foods/:id', function(request, response){
   const id = request.params.id
   const params = request.body
-  Food.updateFood(params, id)
-    .then(function(data){
-      const food = data
-      if(!food) { response.sendStatus(404) }
-      response.json(data)
-    })
+  if (params['name'] || params['calories'] && !params['id'] && !params['created_at']) {
+    Food.updateFood(params, id)
+      .then(function(data){
+        if(!data) { response.sendStatus(404) }
+        response.json(data)
+      })
+  } else {
+    return response.sendStatus(422).send({ error: "Your properties are incorrect."})
+  }
+  
 })
 
 
