@@ -275,24 +275,24 @@ describe('server', function() {
             .then(function() { done() })
       })
   
-      // it('should delete a food from foods based on id', function(done) {
-      //   const ourRequest = this.request
-      //   const id = 1
-      //   
-      //   Food.findAll()
-      //   .then(function(data){
-      //     const foods = data.rows
-      //     assert.equal(foods.length, 2)
-      //   })
-      //   
-      //   ourRequest.delete(`/api/v1/foods/${id}`, function(error, response) {
-      //     if (error) { done(error) }
-      //     
-      //     const foods = JSON.parse(response.body)
-      //     assert.equal(foods.length, 1)
-      //     done()
-      //   })
-      // })
+      it('should delete a food from foods based on id', function(done) {
+        const ourRequest = this.request
+        const id = 1
+        
+        Food.findAll()
+        .then(function(data){
+          const foods = data.rows
+          assert.equal(foods.length, 2)
+        })
+        
+        ourRequest.delete(`/api/v1/foods/${id}`, function(error, response) {
+          if (error) { done(error) }
+          
+          const foods = JSON.parse(response.body)
+          assert.equal(foods.length, 1)
+          done()
+        })
+      })
       
       it ('should return a 422 if id does not exist', function(done) {
         const ourRequest = this.request
