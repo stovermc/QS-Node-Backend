@@ -225,45 +225,59 @@ describe('server', function() {
           .then(function() { done() })
       })
 this.timeout(100000)
-      // it('should update both name and calories of a food', function(done){
-      //   const ourRequest = this.request
-      //   const foodParams = {name: 'steak', calories: 400}
-      //   const idToChange = 1
-      // 
-      //   ourRequest.put(`/api/v1/foods/${idToChange}`, {form: foodParams}, function(error, response){
-      //     if (error) { done(error) }
-      //     const parsedFood = JSON.parse(response.body)
-      //     assert.equal(parsedFood[0].id, idToChange)
-      //     assert.equal(parsedFood[0].name, foodParams.name)
-      //     assert.equal(parsedFood[0].calories, foodParams.calories)
-      //     done()
-      //   })
-      // })
+      it('should update both name and calories of a food', function(done){
+        const ourRequest = this.request
+        const foodParams = {name: 'steak', calories: 400}
+        const idToChange = 1
       
-      // it('should update name', function(done){
-      //   const ourRequest = this.request
-      //   const foodParams = {name: 'steak'}
-      // 
-      //   ourRequest.put(`/api/v1/foods/1`, {form: foodParams}, function(error, response){
-      //     if (error) { done(error) }
-      //     const parsedFood = JSON.parse(response.body)
-      //     assert.equal(parsedFood[0].id, id)
-      //     assert.equal(parsedFood[0].name, foodParams.name)
-      //     assert.equal(parsedFood[0].calories, 150)
-      //     done()
-      //   })
-      // })
+        ourRequest.put(`/api/v1/foods/${idToChange}`, {form: foodParams}, function(error, response){
+          if (error) { done(error) }
+          const parsedFood = JSON.parse(response.body)
+          assert.equal(parsedFood[0].id, idToChange)
+          assert.equal(parsedFood[0].name, foodParams.name)
+          assert.equal(parsedFood[0].calories, foodParams.calories)
+          done()
+        })
+      })
       
-      // it('should return a 422 if the food is not updated correctly', function(done) {
-      //   const ourRequest = this.request
-      //   const foodParams = {name: 'steak', calormies: 400}
-      // 
-      //   ourRequest.put(`/api/v1/foods/1`, {form: foodParams}, function(error, response){
-      //     if (error) { done(error) }
-      //     assert.equal(response.statusCode, 404)
-      //     done()
-      //   })
-      // })
+      it('should update name', function(done){
+        const ourRequest = this.request
+        const foodParams = {name: 'steak'}
+      
+        ourRequest.put(`/api/v1/foods/1`, {form: foodParams}, function(error, response){
+          if (error) { done(error) }
+          const parsedFood = JSON.parse(response.body)
+          assert.equal(parsedFood[0].id, 1)
+          assert.equal(parsedFood[0].name, foodParams.name)
+          assert.equal(parsedFood[0].calories, 150)
+          done()
+        })
+      })
+      
+      it('should return only one property updated if the other is not passed correctly', function(done) {
+        const ourRequest = this.request
+        const foodParams = {name: 'steak', calormies: 400}
+      
+        ourRequest.put(`/api/v1/foods/1`, {form: foodParams}, function(error, response){
+          if (error) { done(error) }
+          const parsedFood = JSON.parse(response.body)
+          assert.equal(parsedFood[0].id, 1)
+          assert.equal(parsedFood[0].name, foodParams.name)
+          assert.equal(parsedFood[0].calories, 150)
+          done()
+        })
+      })
+      
+      it('should return a 422 if a property is not updated correctly', function(done) {
+        const ourRequest = this.request
+        const foodParams = {calormies: 400}
+      
+        ourRequest.put(`/api/v1/foods/1`, {form: foodParams}, function(error, response){
+          if (error) { done(error) }
+          assert.equal(response.statusCode, 422)
+          done()
+        })
+      })
       
       it('should return a 422 if there is an attempt to change the id', function(done) {
         const ourRequest = this.request
