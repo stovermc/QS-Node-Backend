@@ -214,7 +214,8 @@ describe('server', function() {
       })
     })
   })
-
+  
+  describe('PUT', function(){
     describe('PUT /api/v1/foods/:id', function(){
       beforeEach(function(done){
         Food.createFood('muffin', 150)
