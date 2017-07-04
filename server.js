@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
 const Food = require('./lib/models/food')
+const mealsController = require('./lib/controllers/api/v1/meals-controller')
 const environment = process.env.NODE_ENV || 'development';
 const configuration = require('./knexfile')[environment];
 const database = require('knex')(configuration);
@@ -82,5 +83,6 @@ app.put('/api/v1/foods/:id', function(request, response){
     })
 })
 
+app.get('/api/v1/meals', mealsController.index)
 
 module.exports = app

@@ -254,5 +254,4 @@ describe('server', function() {
         })
       })
     })
-  })
 })
