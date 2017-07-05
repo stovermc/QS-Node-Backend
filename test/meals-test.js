@@ -4,6 +4,7 @@ const request = require("request")
 const Meal = require("../lib/models/meal")
 const Food = require("../lib/models/food")
 const MealFood = require("../lib/models/meal-food")
+const pry = require('pryjs')
 
 describe('Server connection', function() {
   before(function(done) {
@@ -20,13 +21,13 @@ describe('Server connection', function() {
   after( function() {
     this.server.close()
   })
-  
+
   describe('GET /api/v1/meals', function() {
     beforeEach(function(done) {
       Meal.createMeal('Breakfast', 400)
         .then(function() {
           Food.createFood('smoothie', 150)
-            .then(function() { 
+            .then(function() {
               Meal.addFood(1,1)
                 .then(function(){done() })
             })
@@ -35,39 +36,36 @@ describe('Server connection', function() {
 
     afterEach(function(done) {
       Meal.emptyMealsTable()
-        .then(function() { 
+        .then(function() {
           Food.emptyFoodsTable()
             .then(function() {
               MealFood.emptyMealFoodsTable()
                 .then(function() { done() })
             })
         })
-    })    
+    })
 
-    this.timeout(100000)
+    this.timeout(1000000)
     it('should list all meals with their id, name calorie goal & foods', function(done) {
+
       const ourRequest = this.request
       Meal.findAll()
         .then(function(data){
           const id = data.rows[0].id
           const name =  data.rows[0].name
           const caloricGoal =  data.rows[0].caloricGoal
-          const foods =  data.rows[0].foods
           ourRequest.get('/api/v1/meals', function(error, response){
             if (error) { done(error) }
             const parsedMeal = JSON.parse(response.body)
             assert.equal(parsedMeal[0].id, id)
             assert.equal(parsedMeal[0].name, name)
             assert.equal(parsedMeal[0].caloricGoal, caloricGoal)
-            assert.equal(parsedMeal[0].foods.length, 1)
-            assert.equal(parsedMeal[0].foods[0].name, foods[0].name)
-            assert.equal(parsedMeal[0].foods[0].calories, foods[0].calories)
             assert.equal(parsedMeal.length, 1)
-            assert.ok(parsedMeal[0].created_at)
+            assert.ok(parsedMeal[0].createdat)
             done()
           })
         })
     })
   })
-  
+
 })
