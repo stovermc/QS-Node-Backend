@@ -20,10 +20,11 @@ app.get('/', function(request, response) {
 
 app.get('/api/v1/foods', foodsController.index)
 app.get('/api/v1/foods/:id', foodsController.show)
-app.post('/api/v1/foods', foodsController.create)  
+app.post('/api/v1/foods', foodsController.create)
 app.put('/api/v1/foods/:id', foodsController.update)
 app.delete('/api/v1/foods/:id', foodsController.destroy)
 
 app.get('/api/v1/meals', mealsController.index)
+app.get('/api/v1/meals/:id', mealsController.show)
 
 module.exports = app

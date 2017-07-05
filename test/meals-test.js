@@ -22,31 +22,32 @@ describe('Server connection', function() {
     this.server.close()
   })
 
-  describe('GET /api/v1/meals', function() {
-    beforeEach(function(done) {
-      Meal.createMeal('Breakfast', 400)
-        .then(function() {
-          Food.createFood('smoothie', 150)
-            .then(function() {
-              Meal.addFood(1,1)
-                .then(function(){done() })
-            })
-        })
+  beforeEach(function(done) {
+    Meal.createMeal('Breakfast', 400)
+    .then(function() {
+      Food.createFood('smoothie', 150)
+      .then(function() {
+        MealFood.create(1,1)
+        .then(function(){ done() })
+      })
     })
+  })
 
-    afterEach(function(done) {
-      Meal.emptyMealsTable()
-        .then(function() {
-          Food.emptyFoodsTable()
-            .then(function() {
-              MealFood.emptyMealFoodsTable()
-                .then(function() { done() })
-            })
-        })
+  afterEach(function(done) {
+    Meal.emptyMealsTable()
+    .then(function() {
+      Food.emptyFoodsTable()
+      .then(function() {
+        MealFood.emptyMealFoodsTable()
+        .then(function() { done() })
+      })
     })
+  })
+
+  describe('GET /api/v1/meals', function() {
 
     this.timeout(1000000)
-    it('should list all meals with their id, name calorie goal & foods', function(done) {
+    it('should list all meals with their id, name and calorie goal', function(done) {
 
       const ourRequest = this.request
       Meal.findAll()
@@ -62,6 +63,39 @@ describe('Server connection', function() {
             assert.equal(parsedMeal[0].caloricGoal, caloricGoal)
             assert.equal(parsedMeal.length, 1)
             assert.ok(parsedMeal[0].createdat)
+            done()
+          })
+        })
+    })
+  })
+
+  describe('GET /api/v1/meals/:id', function(request, response){
+    this.timeout(1000000)
+    it('should list a single meal and its associated foods', function(done){
+
+      const ourRequest = this.request
+      const id = 1
+      // Meal.findAll()
+      //   .then(function(data){
+      //     MealFood.findAll()
+      //       .then(function(data){
+      //       eval(pry.it)
+      //       data
+      //     })
+      //   })
+      Meal.foods(id)
+        .then(function(data){
+          const foodId = data.rows[0].id
+          const foodName =  data.rows[0].name
+          const foodCalories =  data.rows[0].calories
+
+          ourRequest.get(`/api/v1/meals/${id}`, function(error, response){
+            if (error) { done(error) }
+            const parsedMeal = JSON.parse(response.body)
+            assert.equal(parsedMeal[0].id, foodId)
+            assert.equal(parsedMeal[0].name, foodName)
+            assert.equal(parsedMeal[0].calories, foodCalories)
+            assert.equal(parsedMeal.length, 1)
             done()
           })
         })
