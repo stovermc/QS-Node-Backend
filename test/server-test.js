@@ -1,7 +1,6 @@
 const assert = require("chai").assert
 const app = require("../server")
 const request = require("request")
-const Food = require("../lib/models/food")
 const pry = require('pryjs')
 
 describe('server', function() {
@@ -212,8 +211,8 @@ describe('server', function() {
       })
     })
   })
-
-  describe('PUT', function() {  
+  
+  describe('PUT', function(){
     describe('PUT /api/v1/foods/:id', function(){
       beforeEach(function(done){
         Food.createFood('muffin', 150)
@@ -224,7 +223,7 @@ describe('server', function() {
         Food.emptyFoodsTable()
           .then(function() { done() })
       })
-this.timeout(100000)
+      
       it('should update both name and calories of a food', function(done){
         const ourRequest = this.request
         const foodParams = {name: 'steak', calories: 400}
