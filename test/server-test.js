@@ -1,7 +1,6 @@
 const assert = require("chai").assert
 const app = require("../server")
 const request = require("request")
-const Food = require("../lib/models/food")
 const pry = require('pryjs')
 
 describe('server', function() {
@@ -24,7 +23,7 @@ describe('server', function() {
     assert(app)
   })
 
-  describe('GET', function() {
+  describe('GET /', function() {
     it('should return a 200', function(done) {
       this.request.get('/', function(error, response) {
         if (error) { done(error) }
