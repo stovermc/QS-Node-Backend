@@ -21,6 +21,7 @@ app.get('/api/v1/foods', foodsController.index)
 app.get('/api/v1/foods/:id', foodsController.show)
 app.post('/api/v1/foods', foodsController.create)  
 app.put('/api/v1/foods/:id', foodsController.update)
+app.delete('/api/v1/foods/:id', foodsController.destroy)
 
 
 module.exports = app
