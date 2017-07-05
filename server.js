@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
 const foodsController = require('./lib/controllers/api/v1/foods-controller.js')
+const mealsController = require('./lib/controllers/api/v1/meals-controller')
 
 app.set('port', process.env.PORT || 3000)
 app.locals.title = 'Quantified Self'
@@ -23,5 +24,6 @@ app.post('/api/v1/foods', foodsController.create)
 app.put('/api/v1/foods/:id', foodsController.update)
 app.delete('/api/v1/foods/:id', foodsController.destroy)
 
+app.get('/api/v1/meals', mealsController.index)
 
 module.exports = app
