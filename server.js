@@ -21,25 +21,7 @@ app.get('/api/v1/foods', foodsController.index)
 app.get('/api/v1/foods/:id', foodsController.show)
 app.post('/api/v1/foods', foodsController.create)  
 app.put('/api/v1/foods/:id', foodsController.update)
-
-app.delete('/api/v1/foods/:id', function(request, response){
-  const id = request.params.id
-  
-  Food.findFood(id)
-    .then(function(data) {
-      if (data.rowCount == 0) { 
-        response.status(422).send({ error: "That id does not exist"}) 
-      } else {
-        Food.destroyFood(id).then(function(data){
-          Food.findAll().then(function(data){
-            if (data.rowCount == 0) { return response.sendStatus(404) }
-            response.json(data.rows)
-          })
-        })
-      }
-    })
-  
-})
+app.delete('/api/v1/foods/:id', foodsController.destroy)
 
 
 module.exports = app
