@@ -75,14 +75,7 @@ describe('Server connection', function() {
 
       const ourRequest = this.request
       const id = 1
-      // Meal.findAll()
-      //   .then(function(data){
-      //     MealFood.findAll()
-      //       .then(function(data){
-      //       eval(pry.it)
-      //       data
-      //     })
-      //   })
+
       Meal.foods(id)
         .then(function(data){
           const foodId = data.rows[0].id
