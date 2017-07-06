@@ -26,11 +26,15 @@ describe('Server connection', function() {
     .then(function() {
       Food.createFood('smoothie', 150)
       .then(function() {
-        MealFood.create(1,1)
-        .then(function(){ done() })
-      })
+        Food.createFood('apple', 100)
+          .then(function () {
+            MealFood.create(1,1)
+            .then(function(){ done() } )
+          })
+        })
     })
   })
+
 
   afterEach(function(done) {
     Meal.emptyMealsTable()
@@ -100,35 +104,65 @@ describe('Server connection', function() {
 
   describe('POST /mealFoods', function() {
     it('should add a relationship of food to meal through mealFoods', function(done) {
-      this.timeout(1000000)
-      
+
       const ourRequest = this.request
-      
+
       MealFood.findAll()
         .then(function(data){
           const foods = data.rows
           assert.equal(foods.length, 1)
         })
-        
-      Food.createFood('pretzel', 100)
-        .then(function(){
-          ourRequest.post('/api/v1/mealFoods', { form: {mealId: 1, foodId: 2} }, function(error, response) {
-            if (error) { done(error) }
-            
-            MealFood.findAll()
-              .then(function(data){
-                const foods = data.rows
-                assert.equal(foods.length, 2)
-              })
-            
-            const meal = JSON.parse(response.body)
-            assert.equal(meal.foods.length, 2)
-            assert.equal(meal.foods[1].name, "pretzel")
-            assert.equal(meal.foods[1].calories, 100)
-            done()
+
+      ourRequest.post('/api/v1/mealFoods', { form: {mealId: 1, foodId: 2} }, function(error, response) {
+        if (error) { done(error) }
+
+        MealFood.findAll()
+          .then(function(data){
+            const foods = data.rows
+            assert.equal(foods.length, 2)
           })
-        })
+
+        const meal = JSON.parse(response.body)
+        assert.equal(meal.foods.length, 2)
+        assert.equal(meal.foods[1].name, "apple")
+        assert.equal(meal.foods[1].calories, 100)
+        done()
+      })
     })
   })
 
+  describe('DELETE mealFoods/:id', function() {
+
+    beforeEach(function(done) {
+      MealFood.create(1,2)
+        .then(function() { done() })
+    })
+
+    it('should remove the relationship between a meal and a food', function(done) {
+    this.timeout(10000000)
+
+    const ourRequest = this.request
+    const id = 2
+
+    MealFood.findAll()
+      .then(function(data){
+        const mealFoodsCount = data.rows.length
+        assert.equal(mealFoodsCount, 2)
+
+        ourRequest.delete(`/api/v1/mealFoods/${id}`, function (error, response) {
+          if (error) { done(error) }
+
+          MealFood.findAll()
+            .then(function(data){
+              const mealFoodsCount = data.rows.length
+              assert.equal(mealFoodsCount, 1)
+            })
+
+          const meal = JSON.parse(response.body)
+          assert.equal(meal.foods.length, 1)
+          done()
+        })
+      })
+    })
+  })
 })
