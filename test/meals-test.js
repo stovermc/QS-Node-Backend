@@ -45,7 +45,6 @@ describe('Server connection', function() {
 
   describe('GET /api/v1/meals', function() {
 
-    this.timeout(1000000)
     it('should list all meals with their id, name and calorie goal', function(done) {
 
       const ourRequest = this.request
@@ -96,6 +95,39 @@ describe('Server connection', function() {
           })
         })
       })
+    })
+  })
+
+  describe('POST /mealFoods', function() {
+    it('should add a relationship of food to meal through mealFoods', function(done) {
+      this.timeout(1000000)
+      
+      const ourRequest = this.request
+      
+      MealFood.findAll()
+        .then(function(data){
+          const foods = data.rows
+          assert.equal(foods.length, 1)
+        })
+        
+      Food.createFood('pretzel', 100)
+        .then(function(){
+          ourRequest.post('/api/v1/mealFoods', { form: {mealId: 1, foodId: 2} }, function(error, response) {
+            if (error) { done(error) }
+            
+            MealFood.findAll()
+              .then(function(data){
+                const foods = data.rows
+                assert.equal(foods.length, 2)
+              })
+            
+            const meal = JSON.parse(response.body)
+            assert.equal(meal.foods.length, 2)
+            assert.equal(meal.foods[1].name, "pretzel")
+            assert.equal(meal.foods[1].calories, 100)
+            done()
+          })
+        })
     })
   })
 
