@@ -4,7 +4,6 @@ const request = require("request")
 const Meal = require("../lib/models/meal")
 const Food = require("../lib/models/food")
 const MealFood = require("../lib/models/meal-food")
-const pry = require('pryjs')
 
 describe('Server connection', function() {
   before(function(done) {
