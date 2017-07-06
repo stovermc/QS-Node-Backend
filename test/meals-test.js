@@ -81,17 +81,22 @@ describe('Server connection', function() {
           const foodId = data.rows[0].id
           const foodName =  data.rows[0].name
           const foodCalories =  data.rows[0].calories
+          Meal.find(id).then(function(data){
+            const mealName = data.rows[0].name
+            const caloricGoal = data.rows[0].caloricgoal
 
           ourRequest.get(`/api/v1/meals/${id}`, function(error, response){
             if (error) { done(error) }
             const parsedMeal = JSON.parse(response.body)
-            assert.equal(parsedMeal[0].id, foodId)
-            assert.equal(parsedMeal[0].name, foodName)
-            assert.equal(parsedMeal[0].calories, foodCalories)
-            assert.equal(parsedMeal.length, 1)
+            assert.equal(parsedMeal.foods[0].id, foodId)
+            assert.equal(parsedMeal.foods[0].name, foodName)
+            assert.equal(parsedMeal.foods[0].calories, foodCalories)
+            assert.equal(parsedMeal.caloricGoal, caloricGoal)
+            assert.equal(parsedMeal.name, mealName)
             done()
           })
         })
+      })
     })
   })
 
