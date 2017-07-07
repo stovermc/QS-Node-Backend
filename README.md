@@ -26,13 +26,16 @@
 
 ### Foods
 |**HTTP Verb/Method**|**URI Path**|**Description**|**Parameters**|
+| --- | --- |:---:| --- |
 |GET|foods|returns an array of all active foods|none|
 |GET|foods/:id|returns a food based on `id`|none|
 |POST|foods|adds an active food to the database|`?name=<string>&calories=<integer>`|
 |PUT|foods/:id|updates a food|`?name=<string>` or `?calories=<integer>`|
 |DELETE|foods/:id|renders a food inactive|`?name=<string>` or `?calories=<integer>`| **is this restful?**
 
-### Meals
+### Meals (Breakfast, Lunch, Dinner, Snacks)
+|**HTTP Verb/Method**|**URI Path**|**Description**|**Parameters**|
+| --- | --- |:---:| --- |
 |GET|meals|returns an array of all meals|none|
 |GET|meals/:id|returns a meal based on `id`|none|
 |POST|mealFoods|adds a food to a meal|`?mealId=<integer>&foodId=<integer>`|
