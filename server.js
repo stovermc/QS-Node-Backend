@@ -4,6 +4,9 @@ const bodyParser = require('body-parser')
 const foodsController = require('./lib/controllers/api/v1/foods-controller.js')
 const mealsController = require('./lib/controllers/api/v1/meals-controller')
 const mealFoodsController = require('./lib/controllers/api/v1/meal-foods-controller')
+const cors = require('cors');
+
+app.use(cors({origin: '*'}))
 
 app.set('port', process.env.PORT || 3000)
 app.locals.title = 'Quantified Self'
