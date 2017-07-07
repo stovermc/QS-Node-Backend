@@ -4,11 +4,20 @@
 ## Node/Express Development Setup
 1. Clone this repo
 2. Navigate to the root directory
-3. Install dependences with `npm install`
-**Do we need to have them create the database in psql?**
-4. Build the database with `knex migrate:latest`
-5. Seed the database with `knex seed:run`
-6. Start the server with `npm start`
+3. Install dependences `npm install` or `npm i`
+4. Create databases
+```
+psql
+CREATE DATABASE qs
+CREATE DATABASE qs_test
+```
+5. Build the database
+```
+knex migrate:latest
+knex migrate:latest --env test
+```
+6. Seed the database `knex seed:run`
+7. Start the server `npm start`
 
 ## Mocha/Chai Testing
 * Run tests with `npm test`
