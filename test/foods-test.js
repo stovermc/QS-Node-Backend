@@ -204,8 +204,12 @@ describe('Server connection', function() {
   })
 
   describe('PUT /api/v1/foods/:id', function(){
+    const name = 'muffin'
+    const calories = 150
+    const idToChange = 1
+    
     beforeEach(function(done){
-      Food.createFood('muffin', 150)
+      Food.createFood(name, calories)
         .then(function() { done() })
     })
 
@@ -214,65 +218,71 @@ describe('Server connection', function() {
         .then(function() { done() })
     })
 
-    it('should update both name and calories of a food', function(done){
+    it('should update the calories of a food', function(done){
       const ourRequest = this.request
-      const foodParams = {name: 'steak', calories: 400}
-      const idToChange = 1
-
-      ourRequest.put(`/api/v1/foods/${idToChange}`, {form: foodParams}, function(error, response){
+      const foodParam = {calories: 400}
+      ourRequest.put(`/api/v1/foods/${idToChange}`, {form: foodParam}, function(error, response){
         if (error) { done(error) }
         const parsedFood = JSON.parse(response.body)
         assert.equal(parsedFood[0].id, idToChange)
-        assert.equal(parsedFood[0].name, foodParams.name)
-        assert.equal(parsedFood[0].calories, foodParams.calories)
+        assert.equal(parsedFood[0].name, name)
+        assert.equal(parsedFood[0].calories, foodParam.calories)
         done()
       })
     })
 
     it('should update name', function(done){
       const ourRequest = this.request
-      const foodParams = {name: 'steak'}
+      const foodParam = {name: 'steak'}
 
-      ourRequest.put(`/api/v1/foods/1`, {form: foodParams}, function(error, response){
+      ourRequest.put(`/api/v1/foods/${idToChange}`, {form: foodParam}, function(error, response){
         if (error) { done(error) }
         const parsedFood = JSON.parse(response.body)
         assert.equal(parsedFood[0].id, 1)
-        assert.equal(parsedFood[0].name, foodParams.name)
-        assert.equal(parsedFood[0].calories, 150)
+        assert.equal(parsedFood[0].name, foodParam.name)
+        assert.equal(parsedFood[0].calories, calories)
         done()
       })
     })
 
-    it('should return only one property updated if the other is not passed correctly', function(done) {
+    it('should return a 422 if name is not updated correctly', function(done) {
       const ourRequest = this.request
-      const foodParams = {name: 'steak', calormies: 400}
+      const foodParam = {nom: 'steak'}
 
-      ourRequest.put(`/api/v1/foods/1`, {form: foodParams}, function(error, response){
-        if (error) { done(error) }
-        const parsedFood = JSON.parse(response.body)
-        assert.equal(parsedFood[0].id, 1)
-        assert.equal(parsedFood[0].name, foodParams.name)
-        assert.equal(parsedFood[0].calories, 150)
-        done()
-      })
-    })
-
-    it('should return a 422 if a property is not updated correctly', function(done) {
-      const ourRequest = this.request
-      const foodParams = {calormies: 400}
-
-      ourRequest.put(`/api/v1/foods/1`, {form: foodParams}, function(error, response){
+      ourRequest.put(`/api/v1/foods/1`, {form: foodParam}, function(error, response){
         if (error) { done(error) }
         assert.equal(response.statusCode, 422)
         done()
       })
     })
 
-    it('should return a 422 if there is an attempt to change the id', function(done) {
+    it('should return a 422 if calories is not updated correctly', function(done) {
       const ourRequest = this.request
-      const foodParams = {id: 300, name: 'steak', calories: 400}
+      const foodParam = {calormies: 400}
 
-      ourRequest.put(`/api/v1/foods/1`, {form: foodParams}, function(error, response){
+      ourRequest.put(`/api/v1/foods/1`, {form: foodParam}, function(error, response){
+        if (error) { done(error) }
+        assert.equal(response.statusCode, 422)
+        done()
+      })
+    })
+
+    it('should return a 422 if there is an attempt to change more than one property', function(done) {
+      const ourRequest = this.request
+      const foodParam = {name: 'steak', calories: 400}
+
+      ourRequest.put(`/api/v1/foods/1`, {form: foodParam}, function(error, response){
+        if (error) { done(error) }
+        assert.equal(response.statusCode, 422)
+        done()
+      })
+    })
+    
+    it('should return a 422 if there is an attempt to change id', function(done) {
+      const ourRequest = this.request
+      const foodParam = {id: 300}
+
+      ourRequest.put(`/api/v1/foods/1`, {form: foodParam}, function(error, response){
         if (error) { done(error) }
         assert.equal(response.statusCode, 422)
         done()
@@ -281,9 +291,9 @@ describe('Server connection', function() {
 
     it('should return a 422 if there is an attempt to change the created_at', function(done) {
       const ourRequest = this.request
-      const foodParams = {name: 'steak', calories: 400, created_at: new Date}
+      const foodParam = {created_at: new Date}
 
-      ourRequest.put(`/api/v1/foods/1`, {form: foodParams}, function(error, response){
+      ourRequest.put(`/api/v1/foods/1`, {form: foodParam}, function(error, response){
         if (error) { done(error) }
         assert.equal(response.statusCode, 422)
         done()

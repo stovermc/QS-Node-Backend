@@ -1,7 +1,6 @@
 const assert = require("chai").assert
 const app = require("../server")
 const request = require("request")
-const pry = require('pryjs')
 
 describe('server', function() {
   before(function(done) {
