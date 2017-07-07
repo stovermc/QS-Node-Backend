@@ -41,7 +41,6 @@ describe('Server connection', function() {
     })
 
     it('should return a list of all foods with their id, name and calories', function(done) {
-      this.timeout(10000000)
       const ourRequest = this.request
       Food.findAll()
         .then(function(data){
@@ -293,20 +292,6 @@ describe('Server connection', function() {
   })
 
   describe('DELETE /api/v1/foods/:id', function() {
-    this.timeout(100000000)
-    //
-    // beforeEach(function(done) {
-    //   Food.createFood('burger', 400)
-    //     .then(function() {
-    //       Food.createFood('fries', 150)
-    //         .then(function() { done() })
-    //     })
-    // })
-    //
-    // afterEach(function(done) {
-    //     Food.emptyFoodsTable()
-    //       .then(function() { done() })
-    // })
 
     beforeEach(function(done) {
       Food.createFood('carrot', 30)
@@ -322,7 +307,6 @@ describe('Server connection', function() {
     })
 
     it('should change active status to false based on id', function(done) {
-      this.timeout(1000000)
       const ourRequest = this.request
       const id = 1
 
