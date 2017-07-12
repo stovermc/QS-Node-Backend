@@ -21,5 +21,4 @@ exports.seed = function(knex, Promise) {
         ['Snacks', 200, new Date]
       )
     })
-  });
-};
+}
