@@ -1,23 +1,25 @@
 exports.seed = function(knex, Promise) {
-  return knex.raw('TRUNCATE meals RESTART IDENTITY')
+  return knex.raw('TRUNCATE foods RESTART IDENTITY')
   .then(function() {
-    return Promise.all([
-      knex.raw(
+      return knex.raw(
         'INSERT INTO meals (name, caloricGoal, createdAt) VALUES (?, ?, ?)',
         ['Breakfast', 400, new Date]
-      ),
-      knex.raw(
+      )
+    }).then(function() {
+      return knex.raw(
         'INSERT INTO meals (name, caloricGoal, createdAt) VALUES (?, ?, ?)',
         ['Lunch', 600, new Date]
-      ),
-      knex.raw(
+      )
+    }).then(function() {
+      return knex.raw(
         'INSERT INTO meals (name, caloricGoal, createdAt) VALUES (?, ?, ?)',
-        ['Dinner', 600, new Date]
-      ),
-      knex.raw(
+        ['Dinner', 800, new Date]
+      )
+    }).then(function() {
+      return knex.raw(
         'INSERT INTO meals (name, caloricGoal, createdAt) VALUES (?, ?, ?)',
         ['Snacks', 200, new Date]
-      ),
-    ]);
+      )
+    })
   });
 };
