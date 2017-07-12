@@ -52,10 +52,10 @@ this.timeout(100000)
               const parsedFood = JSON.parse(response.body)
               assert.equal(parsedFood[0].id, 1)
               assert.equal(parsedFood[1].id, 2)
-              assert.equal(parsedFood[2].id, 4)
+              assert.equal(parsedFood[2].id, 3)
               assert.equal(parsedFood[0].name, name)
               assert.equal(parsedFood[0].calories, calories)
-              assert.equal(parsedFood.length, 3)
+              assert.equal(parsedFood.length, 12)
               assert.ok(parsedFood[0].created_at)
               done()
             })
@@ -210,7 +210,7 @@ this.timeout(100000)
     const name = 'muffin'
     const calories = 150
     const idToChange = 1
-    
+
     beforeEach(function(done){
       Food.createFood(name, calories)
         .then(function() { done() })
@@ -280,7 +280,7 @@ this.timeout(100000)
         done()
       })
     })
-    
+
     it('should return a 422 if there is an attempt to change id', function(done) {
       const ourRequest = this.request
       const foodParam = {id: 300}

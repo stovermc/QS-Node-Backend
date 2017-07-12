@@ -63,7 +63,7 @@ describe('Server connection', function() {
             assert.equal(parsedMeal[0].id, id)
             assert.equal(parsedMeal[0].name, name)
             assert.equal(parsedMeal[0].caloricGoal, caloricGoal)
-            assert.equal(parsedMeal.length, 1)
+            assert.equal(parsedMeal.length, 5)
             assert.ok(parsedMeal[0].createdat)
             done()
           })
