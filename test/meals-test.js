@@ -131,7 +131,7 @@ describe('Server connection', function() {
     })
   })
 
-  describe('DELETE mealFoods/:id', function() {
+  describe('DELETE mealFoods/:name', function() {
 
     beforeEach(function(done) {
       MealFood.create(1,2)
@@ -149,7 +149,7 @@ describe('Server connection', function() {
         const mealFoodsCount = data.rows.length
         assert.equal(mealFoodsCount, 2)
 
-        ourRequest.delete(`/api/v1/mealFoods/${id}`, function (error, response) {
+        ourRequest.delete(`/api/v1/mealFoods/${id}`, function(error, response) {
           if (error) { done(error) }
 
           MealFood.findAll()
