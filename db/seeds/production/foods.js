@@ -3,46 +3,46 @@ exports.seed = function(knex, Promise) {
   .then(function() {
     return knex.raw(
       'INSERT INTO foods (name, calories, created_at) VALUES (?, ?, ?)',
-      ['Banana', 34, new Date]
+      ['Lacey Pancakes', 200, new Date]
     ).then(function(){
       return knex.raw(
         'INSERT INTO foods (name, calories, created_at) VALUES (?, ?, ?)',
-        ['French Silk Pie', 340, new Date]
+        ['Minted Lamb Pasties', 240, new Date]
       )
     }).then(function(){
       return knex.raw(
         'INSERT INTO foods (name, calories, created_at) VALUES (?, ?, ?)',
-        ['Orange', 34, new Date]
+        ['Chai-Spiced Ginger and Date Tea Loaf', 430, new Date]
       )
     }).then(function(){
       return knex.raw(
         'INSERT INTO foods (name, calories, created_at) VALUES (?, ?, ?)',
-        ['Deep Dish Pizza', 890, new Date]
+        ['Sugar Plum Fairy Cakes', 250, new Date]
       )
     }).then(function(){
       return knex.raw(
         'INSERT INTO foods (name, calories, created_at) VALUES (?, ?, ?)',
-        ['Spinach Salad w/ dressing', 240, new Date]
+        ['Spinach Beet Goat Cheese Salad', 140, new Date]
       )
     }).then(function(){
       return knex.raw(
         'INSERT INTO foods (name, calories, created_at) VALUES (?, ?, ?)',
-        ['Roasted Cauliflower', 240, new Date]
+        ['Chicken, Bacon and Butternut Squash Pie', 440, new Date]
       )
     }).then(function(){
       return knex.raw(
         'INSERT INTO foods (name, calories, created_at) VALUES (?, ?, ?)',
-        ['Chicken Breast', 210, new Date]
+        ['Schichttorte', 110, new Date]
       )
     }).then(function(){
       return knex.raw(
         'INSERT INTO foods (name, calories, created_at) VALUES (?, ?, ?)',
-        ['Dark Chocolate', 150, new Date]
+        ['Twisty Rye Breadsticks', 150, new Date]
       )
     }).then(function(){
       return knex.raw(
         'INSERT INTO foods (name, calories, created_at) VALUES (?, ?, ?)',
-        ['Beef Jerky', 95, new Date]
+        ['Orange and Lemon Curd Pots', 200, new Date]
       )
     })
   });
